@@ -225,7 +225,10 @@ export default function ClientPage({
 
         <main className="py-10 lg:pl-72">
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <Editor initialData={initialContent} />
+            <Editor
+              onChange={() => console.log("Changed!")}
+              initialData={initialContent}
+            />
           </div>
         </main>
       </div>

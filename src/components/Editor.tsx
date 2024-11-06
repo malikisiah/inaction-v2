@@ -8,12 +8,20 @@ import type { PartialBlock } from "@blocknote/core";
 // Our <Editor> component we can reuse later
 export default function Editor({
   initialData,
+  onChange,
 }: {
   initialData: PartialBlock[];
+  onChange: () => void;
 }) {
   // Creates a new editor instance.
   const editor = useCreateBlockNote({ initialContent: initialData });
 
   // Renders the editor instance using a React component.
-  return <BlockNoteView theme={"light"} editor={editor} />;
+  return (
+    <BlockNoteView
+      theme={"light"}
+      onBlur={() => console.log(editor.document)}
+      editor={editor}
+    />
+  );
 }
