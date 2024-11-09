@@ -118,7 +118,7 @@ export default function ClientPage({
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-300 bg-white px-6">
+          <div className="bg-base-200 flex grow flex-col gap-y-5 overflow-y-auto border-r border-black px-6">
             <nav className="mt-32 flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
@@ -137,8 +137,8 @@ export default function ClientPage({
                           }
                           className={classNames(
                             item.current
-                              ? "bg-gray-50 text-rose-600"
-                              : "text-gray-700 hover:bg-gray-50 hover:text-rose-600",
+                              ? "text-accent-content bg-primary"
+                              : "hover:bg-primary hover:text-accent-content text-accent-content",
                             "group flex w-full gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
                           )}
                         >
@@ -146,8 +146,8 @@ export default function ClientPage({
                             aria-hidden="true"
                             className={classNames(
                               item.current
-                                ? "text-rose-600"
-                                : "text-gray-400 group-hover:text-rose-600",
+                                ? "text-accent-content"
+                                : "text-accent-content group-hover:text-accent-content",
                               "h-6 w-6 shrink-0",
                             )}
                           />
@@ -162,7 +162,7 @@ export default function ClientPage({
           </div>
         </div>
 
-        <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+        <div className="bg- sticky top-0 z-40 flex items-center gap-x-6 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}

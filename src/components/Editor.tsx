@@ -81,7 +81,7 @@ export default function Editor({}: { initialData: PartialBlock[] }) {
   });
 
   return (
-    <BlockNoteView editor={editor} slashMenu={false} theme={"light"}>
+    <BlockNoteView editor={editor} slashMenu={false} theme={"dark"}>
       <SuggestionMenuController
         triggerCharacter={"/"}
         getItems={async (query) =>
