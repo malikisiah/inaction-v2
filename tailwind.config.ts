@@ -1,7 +1,7 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import daisyui from "daisyui";
-
+import themes from "daisyui/src/theming/themes";
 export default {
   content: ["./src/**/*.tsx"],
   theme: {
@@ -13,6 +13,13 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["light", "dark", "cupcake", "black"],
+    themes: [
+      {
+        black: {
+          ...themes.black,
+        },
+      },
+      "lofi",
+    ],
   },
 } satisfies Config;

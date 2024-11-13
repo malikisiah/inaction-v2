@@ -18,7 +18,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme="black"
-      className={`${GeistSans.variable} h-full bg-[#1f1f1f]`}
+      className={`${GeistSans.variable} h-full bg-primary`}
     >
       <body className="h-full">
         <TRPCReactProvider>{children}</TRPCReactProvider>

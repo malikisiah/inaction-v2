@@ -118,7 +118,7 @@ export default function ClientPage({
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="bg-base-200 flex grow flex-col gap-y-5 overflow-y-auto border-r border-black px-6">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-black bg-base-200 px-6">
             <nav className="mt-32 flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
@@ -137,8 +137,8 @@ export default function ClientPage({
                           }
                           className={classNames(
                             item.current
-                              ? "text-accent-content bg-primary"
-                              : "hover:bg-primary hover:text-accent-content text-accent-content",
+                              ? "bg-primary text-accent-content"
+                              : "text-accent-content hover:bg-primary hover:text-accent-content",
                             "group flex w-full gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
                           )}
                         >
@@ -188,7 +188,11 @@ export default function ClientPage({
 
         <main className="py-10 lg:pl-72">
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <Editor initialData={initialContent} />
+            {navigation.map((item, idx) => {
+              if (item.current && item.name === "Editor") {
+                return <Editor key={idx} initialData={initialContent} />;
+              }
+            })}
           </div>
         </main>
       </div>
