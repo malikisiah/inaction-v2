@@ -17,6 +17,7 @@ export default {
       {
         black: {
           ...themes.black,
+          primary: "#1f1f1f",
         },
       },
       "lofi",

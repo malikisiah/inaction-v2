@@ -19,8 +19,13 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
 import { Square2StackIcon } from "@heroicons/react/24/solid";
+import { api } from "~/trpc/react";
 
-export default function Editor({}: { initialData: PartialBlock[] }) {
+export default function Editor({
+  initialContent,
+}: {
+  initialContent: PartialBlock[];
+}) {
   const schema = BlockNoteSchema.create({
     blockSpecs: {
       ...defaultBlockSpecs,
@@ -36,7 +41,8 @@ export default function Editor({}: { initialData: PartialBlock[] }) {
     },
   });
 
-  const editor = useCreateBlockNote({ schema });
+  const editor = useCreateBlockNote({ schema, initialContent: initialContent });
+  const save = api.editor.save.useMutation();
 
   const insertAct = (editor: typeof schema.BlockNoteEditor) => ({
     title: "Act",
@@ -81,16 +87,31 @@ export default function Editor({}: { initialData: PartialBlock[] }) {
   });
 
   return (
-    <BlockNoteView editor={editor} slashMenu={false} theme={"dark"}>
-      <SuggestionMenuController
-        triggerCharacter={"/"}
-        getItems={async (query) =>
-          filterSuggestionItems(
-            [insertAct(editor), insertScene(editor), insertDialogue(editor)],
-            query,
-          )
-        }
-      />
-    </BlockNoteView>
+    <>
+      <BlockNoteView
+        onFocus={() => console.log(editor.document)}
+        editor={editor}
+        slashMenu={false}
+        theme={"dark"}
+      >
+        <SuggestionMenuController
+          triggerCharacter={"/"}
+          getItems={async (query) =>
+            filterSuggestionItems(
+              [insertAct(editor), insertScene(editor), insertDialogue(editor)],
+              query,
+            )
+          }
+        />
+      </BlockNoteView>
+      <div className="flex justify-center">
+        <button
+          onClick={() => save.mutate({ jsonBlocks: editor.document })}
+          className="btn rounded-md"
+        >
+          Save Content
+        </button>
+      </div>
+    </>
   );
 }

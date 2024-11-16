@@ -190,7 +190,11 @@ export default function ClientPage({
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
             {navigation.map((item, idx) => {
               if (item.current && item.name === "Editor") {
-                return <Editor key={idx} initialData={initialContent} />;
+                return (
+                  <div key={idx}>
+                    <Editor initialContent={initialContent} />
+                  </div>
+                );
               }
             })}
           </div>

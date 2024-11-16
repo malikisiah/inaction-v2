@@ -1,5 +1,18 @@
 import ClientPage from "./ClientPage";
-
+import type { PartialBlock } from "@blocknote/core";
+import ErrorPage from "~/components/ErrorPage";
+import { db } from "~/server/db";
 export default async function Home() {
-  return <ClientPage initialContent={[]} />;
+  const data = await db.document.findUnique({
+    where: {
+      id: "70d64593-18f3-47ab-b3d5-d5f835b648fb",
+    },
+  });
+
+  if (data) {
+    const initialContent = data.content as PartialBlock[];
+    return <ClientPage initialContent={initialContent} />;
+  } else {
+    return <ErrorPage />;
+  }
 }

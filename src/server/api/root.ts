@@ -1,4 +1,4 @@
-import { editorRouter } from "./routers/post";
+import { editorRouter } from "./routers/editor";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
