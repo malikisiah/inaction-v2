@@ -88,12 +88,7 @@ export default function Editor({
 
   return (
     <>
-      <BlockNoteView
-        onFocus={() => console.log(editor.document)}
-        editor={editor}
-        slashMenu={false}
-        theme={"dark"}
-      >
+      <BlockNoteView editor={editor} slashMenu={false} theme={"light"}>
         <SuggestionMenuController
           triggerCharacter={"/"}
           getItems={async (query) =>
