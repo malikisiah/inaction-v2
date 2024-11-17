@@ -15,6 +15,6 @@ export default {
   },
   plugins: [daisyui, forms],
   daisyui: {
-    themes: ["autumn"],
+    themes: ["light", "dark"],
   },
 } satisfies Config;
