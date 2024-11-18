@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="light"
+      data-theme="nord"
       className={`${GeistSans.variable} h-full bg-base-100`}
     >
       <body className="h-full">
