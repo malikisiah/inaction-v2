@@ -1,9 +1,11 @@
-export default function Page() {
-  return (
-    <div>
-      <main className="py-10 lg:pl-72">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">Characters Page</div>
-      </main>
-    </div>
-  );
+import ClientPage from "./ClientPage";
+import { trpc } from "~/trpc/server";
+
+export default async function Page({
+  params,
+}: {
+  params: { documentId: string };
+}) {
+  const characters = await trpc.character.getAll({ playId: params.documentId });
+  return <ClientPage documentId={params.documentId} characters={characters} />;
 }

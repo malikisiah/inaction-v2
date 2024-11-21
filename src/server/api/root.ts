@@ -1,4 +1,5 @@
 import { playRouter } from "./routers/play";
+import { characterRouter } from "./routers/character";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   play: playRouter,
+  character: characterRouter,
 });
 
 // export type definition of API
