@@ -254,8 +254,6 @@ export default function SideBar() {
             />
           </a>
         </div>
-
-        <main className="py-10 lg:pl-72"></main>
       </div>
     </>
   );
