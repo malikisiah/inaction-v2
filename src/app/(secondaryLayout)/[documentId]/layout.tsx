@@ -4,7 +4,8 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import NavBar from "~/components/NavBar";
+
+import SideBar from "~/components/SideBar";
 
 export const metadata: Metadata = {
   title: "Inaction",
@@ -12,18 +13,18 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/logo_transparent.png" }],
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
       data-theme="nord"
-      className={`${GeistSans.variable} h-full bg-base-100`}
+      className={`${GeistSans.variable} h-full bg-white`}
     >
       <body className="h-full">
         <TRPCReactProvider>
-          <NavBar />
+          <SideBar />
           {children}
         </TRPCReactProvider>
       </body>

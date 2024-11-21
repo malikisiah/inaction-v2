@@ -1,23 +1,19 @@
 "use client";
-import { PhoneIcon, DocumentIcon, PlusIcon } from "@heroicons/react/20/solid";
+import { DocumentIcon, PlusIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import CreatePlayModal from "~/components/CreatePlayModal";
+import type { Play } from "@prisma/client";
+import { trpc } from "~/trpc/react";
+import avatar from "public/logo_transparent.png";
 
-const plays = [
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    role: "Author",
-    email: "janecooper@example.com",
-    telephone: "+1-202-555-0170",
-    imageUrl:
-      "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-];
-export default function ClientPage() {
+export default function ClientPage({ plays }: { plays: Play[] }) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { data, refetch } = trpc.play.getAll.useQuery(undefined, {
+    initialData: plays,
+  });
   return (
     <>
       <div className="min-h-full">
@@ -36,42 +32,43 @@ export default function ClientPage() {
                   <PlusIcon className="size-10 text-primary" />
                 </button>
               </div>
+
               <ul
                 role="list"
                 className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
               >
-                {plays.map((play) => (
+                {data.map((play) => (
                   <li
-                    key={play.email}
+                    key={play.id}
                     className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
                   >
                     <div className="flex w-full items-center justify-between space-x-6 p-6">
                       <div className="flex-1 truncate">
                         <div className="flex items-center space-x-3">
                           <h3 className="truncate text-sm font-medium text-gray-900">
-                            {play.name}
+                            {play.title}
                           </h3>
-                          <span className="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            {play.role}
+                          <span className="inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-medium text-accent ring-1 ring-inset ring-accent/20">
+                            Author
                           </span>
                         </div>
                         <p className="mt-1 truncate text-sm text-gray-500">
-                          {play.title}
+                          Malik Teague
                         </p>
                       </div>
                       <Image
                         alt=""
                         width={500}
                         height={500}
-                        src={play.imageUrl}
-                        className="shirnk-0 size-10 rounded-full bg-green-500"
+                        src={avatar}
+                        className="shirnk-0 size-10 rounded-full"
                       />
                     </div>
                     <div>
                       <div className="-mt-px flex divide-x divide-gray-200">
                         <div className="flex w-0 flex-1">
                           <Link
-                            href={`mailto:${play.email}`}
+                            href={`/${play.id}/editor`}
                             className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                           >
                             <DocumentIcon
@@ -81,9 +78,9 @@ export default function ClientPage() {
                             Edit
                           </Link>
                         </div>
-                        <div className="-ml-px flex w-0 flex-1">
+                        {/* <div className="-ml-px flex w-0 flex-1">
                           <a
-                            href={`tel:${play.telephone}`}
+                            href={`tel:${play.title}`}
                             className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                           >
                             <PhoneIcon
@@ -92,17 +89,25 @@ export default function ClientPage() {
                             />
                             Call
                           </a>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </li>
                 ))}
+                {loading ? (
+                  <li className="skeleton col-span-1 divide-y divide-gray-200 rounded-lg shadow"></li>
+                ) : null}
               </ul>
             </div>
           </main>
         </div>
       </div>
-      <CreatePlayModal open={open} setOpen={setOpen} />
+      <CreatePlayModal
+        open={open}
+        setOpen={setOpen}
+        setLoading={setLoading}
+        refetch={refetch}
+      />
     </>
   );
 }

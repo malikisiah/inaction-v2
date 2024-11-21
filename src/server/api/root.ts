@@ -1,4 +1,4 @@
-import { editorRouter } from "./routers/editor";
+import { playRouter } from "./routers/play";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -7,7 +7,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  editor: editorRouter,
+  play: playRouter,
 });
 
 // export type definition of API

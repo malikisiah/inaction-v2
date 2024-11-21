@@ -7,7 +7,7 @@ export default async function Home({
 }: {
   params: { documentId: string };
 }) {
-  const data = await db.document.findUnique({
+  const data = await db.play.findUnique({
     where: {
       id: params.documentId,
     },
@@ -15,7 +15,12 @@ export default async function Home({
 
   if (data) {
     const initialContent = data.content as PartialBlock[];
-    return <ClientPage initialContent={initialContent} />;
+    return (
+      <ClientPage
+        initialContent={initialContent}
+        documentId={params.documentId}
+      />
+    );
   } else {
     return <ErrorPage />;
   }

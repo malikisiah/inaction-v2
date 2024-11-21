@@ -2,6 +2,7 @@
 import "@blocknote/core/fonts/inter.css";
 import { SuggestionMenuController, useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
+import { locales } from "@blocknote/core";
 import "@blocknote/mantine/style.css";
 import {
   BlockNoteSchema,
@@ -13,18 +14,20 @@ import {
   type PartialBlock,
 } from "@blocknote/core";
 
-import { Act, Scene, Dialogue } from "./BlockItems";
+import { Act, Scene, Dialogue, Title } from "./BlockItems";
 import {
   ChatBubbleLeftEllipsisIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
 import { Square2StackIcon } from "@heroicons/react/24/solid";
-import { api } from "~/trpc/react";
+import { trpc } from "~/trpc/react";
 
 export default function Editor({
   initialContent,
+  documentId,
 }: {
   initialContent: PartialBlock[];
+  documentId: string;
 }) {
   const schema = BlockNoteSchema.create({
     blockSpecs: {
@@ -32,6 +35,7 @@ export default function Editor({
       act: Act,
       scene: Scene,
       dialogue: Dialogue,
+      title: Title,
     },
     inlineContentSpecs: {
       ...defaultInlineContentSpecs,
@@ -41,8 +45,20 @@ export default function Editor({
     },
   });
 
-  const editor = useCreateBlockNote({ schema, initialContent: initialContent });
-  const save = api.editor.save.useMutation();
+  const editor = useCreateBlockNote({
+    schema,
+    initialContent: initialContent,
+    dictionary: {
+      ...locales.en,
+      placeholders: {
+        ...locales.en.placeholders,
+
+        default: "Write something, or press '/' for commands",
+      },
+    },
+  });
+
+  const update = trpc.play.update.useMutation();
 
   const insertAct = (editor: typeof schema.BlockNoteEditor) => ({
     title: "Act",
@@ -88,7 +104,14 @@ export default function Editor({
 
   return (
     <>
-      <BlockNoteView editor={editor} slashMenu={false} theme={"light"}>
+      <BlockNoteView
+        onBlur={() =>
+          update.mutate({ jsonBlocks: editor.document, playId: documentId })
+        }
+        editor={editor}
+        slashMenu={false}
+        theme={"light"}
+      >
         <SuggestionMenuController
           triggerCharacter={"/"}
           getItems={async (query) =>
@@ -99,14 +122,6 @@ export default function Editor({
           }
         />
       </BlockNoteView>
-      <div className="flex justify-center">
-        <button
-          onClick={() => save.mutate({ jsonBlocks: editor.document })}
-          className="btn rounded-md"
-        >
-          Save Content
-        </button>
-      </div>
     </>
   );
 }
