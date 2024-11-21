@@ -7,18 +7,26 @@ export default async function Home({
 }: {
   params: { documentId: string };
 }) {
-  const data = await db.play.findUnique({
+  const document = await db.play.findUnique({
     where: {
       id: params.documentId,
     },
   });
 
-  if (data) {
-    const initialContent = data.content as PartialBlock[];
+  const characters = await db.character.findMany({
+    where: {
+      playId: params.documentId,
+    },
+  });
+
+  if (document) {
+    const initialContent = document.content as PartialBlock[];
     return (
       <ClientPage
+        updatedAt={document.updatedAt}
         initialContent={initialContent}
         documentId={params.documentId}
+        characters={characters}
       />
     );
   } else {

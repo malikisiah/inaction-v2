@@ -1,6 +1,10 @@
 "use client";
 import "@blocknote/core/fonts/inter.css";
-import { SuggestionMenuController, useCreateBlockNote } from "@blocknote/react";
+import {
+  type DefaultReactSuggestionItem,
+  SuggestionMenuController,
+  useCreateBlockNote,
+} from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import { locales } from "@blocknote/core";
 import "@blocknote/mantine/style.css";
@@ -21,14 +25,39 @@ import {
 } from "@heroicons/react/24/solid";
 import { Square2StackIcon } from "@heroicons/react/24/solid";
 import { trpc } from "~/trpc/react";
+import { Mention } from "./Mention";
+import type { Character } from "@prisma/client";
 
 export default function Editor({
   initialContent,
   documentId,
+  characters,
 }: {
   initialContent: PartialBlock[];
   documentId: string;
+  characters: Character[];
 }) {
+  const getMentionMenuItems = (
+    editor: typeof schema.BlockNoteEditor,
+  ): DefaultReactSuggestionItem[] => {
+    const users = characters.map((item) => item.name);
+
+    return users.map((user) => ({
+      title: user,
+      onItemClick: () => {
+        editor.insertInlineContent([
+          {
+            type: "mention",
+            props: {
+              user,
+            },
+          },
+          " ", // add a space after the mention
+        ]);
+      },
+    }));
+  };
+
   const schema = BlockNoteSchema.create({
     blockSpecs: {
       ...defaultBlockSpecs,
@@ -39,6 +68,7 @@ export default function Editor({
     },
     inlineContentSpecs: {
       ...defaultInlineContentSpecs,
+      mention: Mention,
     },
     styleSpecs: {
       ...defaultStyleSpecs,
@@ -119,6 +149,13 @@ export default function Editor({
               [insertAct(editor), insertScene(editor), insertDialogue(editor)],
               query,
             )
+          }
+        />
+        <SuggestionMenuController
+          triggerCharacter={"@"}
+          getItems={async (query) =>
+            // Gets the mentions menu items
+            filterSuggestionItems(getMentionMenuItems(editor), query)
           }
         />
       </BlockNoteView>
