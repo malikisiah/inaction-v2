@@ -53,7 +53,7 @@ export default function ClientPage({ plays }: { plays: Play[] }) {
                           </span>
                         </div>
                         <p className="mt-1 truncate text-sm text-gray-500">
-                          Malik Teague
+                          Biblish User
                         </p>
                       </div>
                       <Image

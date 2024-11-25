@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { v4 as uuidv4 } from "uuid";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -12,7 +13,35 @@ export const playRouter = createTRPCRouter({
       await ctx.db.play.create({
         data: {
           title: input.title,
-          content: [{}],
+          content: [
+            {
+              id: uuidv4(),
+              type: "title",
+              props: {
+                textColor: "default",
+                textAlignment: "left",
+              },
+              content: [
+                {
+                  text: input.title,
+                  type: "text",
+                  styles: {},
+                },
+              ],
+              children: [],
+            },
+            {
+              id: uuidv4(),
+              type: "paragraph",
+              props: {
+                textColor: "default",
+                textAlignment: "left",
+                backgroundColor: "default",
+              },
+              content: [],
+              children: [],
+            },
+          ],
         },
       });
     }),
