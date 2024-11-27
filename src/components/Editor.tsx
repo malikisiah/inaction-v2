@@ -4,6 +4,13 @@ import {
   type DefaultReactSuggestionItem,
   SuggestionMenuController,
   useCreateBlockNote,
+  DragHandleMenu,
+  RemoveBlockItem,
+  SideMenu,
+  SideMenuController,
+  BasicTextStyleButton,
+  FormattingToolbar,
+  FormattingToolbarController,
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import { locales } from "@blocknote/core";
@@ -140,8 +147,22 @@ export default function Editor({
         }
         editor={editor}
         slashMenu={false}
+        sideMenu={false}
+        formattingToolbar={false}
         theme={"light"}
       >
+        <SideMenuController
+          sideMenu={(props) => (
+            <SideMenu
+              {...props}
+              dragHandleMenu={(props) => (
+                <DragHandleMenu {...props}>
+                  <RemoveBlockItem {...props}>Delete</RemoveBlockItem>
+                </DragHandleMenu>
+              )}
+            />
+          )}
+        />
         <SuggestionMenuController
           triggerCharacter={"/"}
           getItems={async (query) =>
@@ -157,6 +178,29 @@ export default function Editor({
             // Gets the mentions menu items
             filterSuggestionItems(getMentionMenuItems(editor), query)
           }
+        />
+
+        <FormattingToolbarController
+          formattingToolbar={() => (
+            <FormattingToolbar>
+              <BasicTextStyleButton
+                basicTextStyle={"bold"}
+                key={"boldStyleButton"}
+              />
+              <BasicTextStyleButton
+                basicTextStyle={"italic"}
+                key={"italicStyleButton"}
+              />
+              <BasicTextStyleButton
+                basicTextStyle={"underline"}
+                key={"underlineStyleButton"}
+              />
+              <BasicTextStyleButton
+                basicTextStyle={"strike"}
+                key={"strikeStyleButton"}
+              />
+            </FormattingToolbar>
+          )}
         />
       </BlockNoteView>
     </>

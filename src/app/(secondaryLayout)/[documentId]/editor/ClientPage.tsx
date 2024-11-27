@@ -22,8 +22,8 @@ export default function ClientPage({
 }) {
   return (
     <>
-      <div className="">
-        <div className="ml-72 mr-2 flex items-center justify-end p-3 sm:hidden lg:flex">
+      <div>
+        <div className="sticky top-0 z-40 ml-72 flex items-center justify-end bg-base-300 p-3 sm:hidden lg:flex">
           <div className="flex items-center gap-5">
             <p className="text-gray-500">Edited {updatedAt.toDateString()}</p>
             <button className="hover:text-gray-500">
@@ -38,6 +38,7 @@ export default function ClientPage({
             </button>
           </div>
         </div>
+
         <main className="py-10 lg:pl-72">
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <Editor

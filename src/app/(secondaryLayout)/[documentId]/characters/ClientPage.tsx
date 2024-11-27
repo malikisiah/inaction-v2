@@ -28,18 +28,20 @@ export default function ClientPage({
     { playId: documentId },
     { initialData: characters },
   );
+
+  const [cast, setCast] = useState(data);
   const createCharacter = trpc.character.create.useMutation({
     onSuccess: async () => {
       setLoading(false);
-      await refetch();
+
+      const { data } = await refetch();
+      if (data) {
+        setCast(data);
+      }
     },
   });
 
-  const updateCharacter = trpc.character.update.useMutation({
-    onSuccess: async () => {
-      await refetch();
-    },
-  });
+  const updateCharacter = trpc.character.update.useMutation();
   return (
     <div>
       <main className="py-10 lg:pl-72">
@@ -70,16 +72,17 @@ export default function ClientPage({
                 role="list"
                 className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3"
               >
-                {data.map((character) => (
+                {cast.map((character) => (
                   <li key={character.name}>
                     {character.image ? (
-                      <Image
-                        width={500}
-                        height={500}
-                        alt=""
-                        src={character.image}
-                        className="mx-auto size-56 rounded-full"
-                      />
+                      <div className="relative mx-auto size-56">
+                        <Image
+                          alt=""
+                          fill
+                          src={character.image}
+                          className="rounded-full"
+                        />
+                      </div>
                     ) : (
                       <span className="relative mx-auto flex size-56 items-center justify-center rounded-full bg-gray-200">
                         <Popover as="div" className="relative">
@@ -107,21 +110,29 @@ export default function ClientPage({
                                     />
                                   </div>
                                   <input
-                                    onChange={(e) =>
-                                      setImageURL(e.target.value)
-                                    }
+                                    onChange={(e) => {
+                                      setImageURL(e.target.value);
+                                    }}
                                     placeholder="Image URL"
                                     className="block w-full rounded-none rounded-l-md border-0 py-1.5 pl-10 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
                                   />
                                 </div>
                                 <CloseButton
-                                  onClick={() =>
+                                  onClick={() => {
+                                    setCast((prev) =>
+                                      prev.map((item) =>
+                                        character.id === item.id
+                                          ? { ...item, image: imageURL }
+                                          : item,
+                                      ),
+                                    );
+
                                     updateCharacter.mutate({
                                       characterId: character.id,
                                       field: "image",
                                       value: imageURL,
-                                    })
-                                  }
+                                    });
+                                  }}
                                   type="button"
                                   className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md bg-secondary px-3 py-2 text-sm font-semibold"
                                 >
@@ -134,22 +145,52 @@ export default function ClientPage({
                       </span>
                     )}
 
-                    <textarea
-                      onBlur={(e) =>
-                        updateCharacter.mutate({
-                          characterId: character.id,
-                          field: "name",
-                          value: e.target.value,
-                        })
-                      }
-                      rows={1}
-                      className="focus mt-6 resize-none border-none bg-transparent text-center text-base/7 font-semibold tracking-tight text-gray-900 outline-none focus:ring-0"
-                    >
-                      {character.name}
-                    </textarea>
-                    <p className="text-sm/6 text-gray-600">
-                      {character.description}
-                    </p>
+                    <div className="mt-5 flex-col -space-y-5">
+                      <textarea
+                        onBlur={(e) => {
+                          setCast((prev) =>
+                            prev.map((item) =>
+                              character.id === item.id
+                                ? { ...item, name: e.target.value }
+                                : item,
+                            ),
+                          );
+
+                          updateCharacter.mutate({
+                            characterId: character.id,
+                            field: "name",
+                            value: e.target.value,
+                          });
+                        }}
+                        rows={1}
+                        className="focus resize-none border-none bg-transparent text-center text-base/7 font-semibold tracking-tight text-gray-900 outline-none focus:ring-0"
+                      >
+                        {character.name}
+                      </textarea>
+                      <textarea
+                        onBlur={(e) => {
+                          setCast((prev) =>
+                            prev.map((item) =>
+                              character.id === item.id
+                                ? { ...item, description: e.target.value }
+                                : item,
+                            ),
+                          );
+
+                          updateCharacter.mutate({
+                            characterId: character.id,
+                            field: "description",
+                            value: e.target.value,
+                          });
+                        }}
+                        rows={1}
+                        className="focus resize-none border-none bg-transparent text-center text-sm/6 font-semibold tracking-tight text-gray-600 outline-none focus:ring-0"
+                      >
+                        {character.description
+                          ? character.description
+                          : "Add a description"}
+                      </textarea>
+                    </div>
                   </li>
                 ))}
                 {loading ? (

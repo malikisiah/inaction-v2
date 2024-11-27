@@ -154,7 +154,7 @@ export default function SideBar() {
         </Dialog>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden border-r border-gray-400 lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-base-200 px-6">
             <div className="flex h-16 shrink-0 items-center justify-center">

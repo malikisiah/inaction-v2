@@ -16,6 +16,18 @@ const config = {
         protocol: "https",
         hostname: "plus.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "w.wallhaven.cc",
+      },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*",
+      },
     ],
   },
 };

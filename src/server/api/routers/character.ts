@@ -10,6 +10,9 @@ export const characterRouter = createTRPCRouter({
         where: {
           playId: input.playId,
         },
+        orderBy: {
+          createdAt: "asc",
+        },
       });
     }),
 
